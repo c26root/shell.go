@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"runtime"
 	"syscall"
 	"time"
 )
@@ -20,6 +21,11 @@ var (
 )
 
 func main() {
+
+	if runtime.GOOS == "windows" {
+		shell = "c:\\windows\\system32\\cmd.exe"
+	}
+
 	if len(os.Args) < 3 {
 		fmt.Printf("Usage: %s [ip] [port] [udp]\n", path.Base(os.Args[0]))
 		os.Exit(0)
@@ -69,9 +75,7 @@ func udp(addr string) *net.UDPConn {
 
 func tcp(addr string) net.Conn {
 	conn, err := net.DialTimeout("tcp", addr, 5*time.Second)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	checkError(err)
 	return conn
 }
 
